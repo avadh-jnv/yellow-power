@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Yellow Power</title>
+<style>
+body{
+font-family:Arial;
+background:#111;
+color:white;
+text-align:center;
+}
+
+button{
+padding:10px 20px;
+margin:10px;
+cursor:pointer;
+}
+
+#videos{
+margin-top:30px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>⚡ Yellow Power</h1>
+
+<h3>Login</h3>
+
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
+
+<br>
+<button onclick="login()">Login</button>
+
+<h3>Videos</h3>
+
+<button onclick="loadVideos()">Load Videos</button>
+
+<div id="videos"></div>
+
+<script>
+
+async function login(){
+
+const u=document.getElementById("user").value
+const p=document.getElementById("pass").value
+
+const res=await fetch("/api/login",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+username:u,
+password:p
+})
+})
+
+const data=await res.json()
+
+if(data.success){
+alert("Login success")
+}else{
+alert("Login failed")
+}
+
+}
+
+async function loadVideos(){
+
+const res=await fetch("/api/videos")
+const data=await res.json()
+
+let html=""
+
+data.forEach(v=>{
+html+=`
+<div>
+<h4>${v.title}</h4>
+<p>${v.channel}</p>
+</div>
+`
+})
+
+document.getElementById("videos").innerHTML=html
+
+}
+
+</script>
+
+</body>
+</html>
